@@ -5,6 +5,7 @@ namespace Drupal\purl;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\purl\Entity\Provider;
+use Drupal\purl\Plugin\ModifierIndex;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,9 +17,8 @@ class ContextHelper
    */
   protected $storage;
 
-  public function __construct(EntityStorageInterface $storage)
+  public function __construct()
   {
-    $this->storage = $storage;
   }
 
   /**
@@ -33,6 +33,8 @@ class ContextHelper
   {
 
     $result = $path;
+
+
 
     /** @var Context $context */
     foreach ($contexts as $context) {
@@ -97,18 +99,35 @@ class ContextHelper
 
   /**
    * @param array $map
+   *   Provider Id => modifier.
    * @return array
    */
-  public function createContextsFromMap(array $map)
-  {
+  public function createContextsFromMap(array $map) {
+    if (isset($map['id'])) {
+      // get the context for a specific purl object
+      /** @var ModifierIndex $modifierIndex */
+      $modifierIndex = \Drupal::service('purl.modifier_index');
+      $modifiers = $modifierIndex->getModifiersById($map['id']);
+      $mod = reset($modifiers);
+      return [new Context(trim($mod->getModifierKey(),'/'), $mod->getMethod())];
+    }
+
     if (count($map) === 0) {
       return [];
     }
 
-    $providers = $this->storage->loadMultiple(array_keys($map));
+    $providers = $this->getStorage()->loadMultiple(array_keys($map));
 
     return array_map(function (Provider $provider) use ($map) {
       return new Context($map[$provider->id()], $provider->getMethodPlugin());
     }, $providers);
+  }
+
+  protected function getStorage() : EntityStorageInterface {
+    if (empty($this->storage)) {
+      $this->storage = \Drupal::entityTypeManager ()->getStorage('purl_provider');
+    }
+
+    return $this->storage;
   }
 }
