@@ -38,4 +38,33 @@ class ModifierIndex
 
     return $modifiers[$provider->id()];
   }
+
+  public function findModifiers() {
+    return array();
+  }
+
+  /**
+   * Get a list of all modifiers that match a given id.
+   *
+   * @param int $id
+   * @return Modifier[]
+   */
+  public function getModifiersById($id) {
+    /** @var Modifier[] $modifiers */
+    static $modifiers = [];
+
+    if (empty($modifiers)) {
+      $modifiers = $this->findAll();
+    }
+
+    $selected = [];
+    foreach ($modifiers as $m) {
+      if ($m->getValue() == $id) {
+        $selected[] = $m;
+      }
+    }
+
+    return $selected;
+  }
 }
+
