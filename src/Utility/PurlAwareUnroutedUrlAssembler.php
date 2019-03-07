@@ -79,7 +79,7 @@ class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler
 
       $host = $request->getScheme() . '://' . $options['host'];
       if ($request->getPort()) {
-        $host . ':' . $request->getPort();
+        $host .= ':' . $request->getPort();
       }
 
       $current_base_url = $host . $current_base_path;
@@ -109,7 +109,7 @@ class PurlAwareUnroutedUrlAssembler extends UnroutedUrlAssembler
 
     $uri = str_replace('%2F', '/', rawurlencode($prefix . $uri));
     $query = $options['query'] ? ('?' . UrlHelper::buildQuery($options['query'])) : '';
-    $url = $base . $options['script'] . $uri . $query . $options['fragment'];
+    $url = $base . $options['script'] . ltrim($uri, '/') . $query . $options['fragment'];
     return $collect_bubbleable_metadata ? $generated_url->setGeneratedUrl($url) : $url;
   }
 }
