@@ -1,11 +1,3 @@
-node.type.*.third_party.keep_context:
-  type: mapping
-  label: 'Purl Maintain Node Context'
-  mapping:
-    keep_context:
-      type: boolean
-      label: 'Enable/disable context for this node type'
-
 purl.purl_provider.*:
   type: config_entity
   label: 'PURL Provider Config'
@@ -19,3 +11,11 @@ purl.purl_provider.*:
     method_key:
       type: string
       label: 'Method key'
+
+node.type.*.third_party.keep_context:
+  type: mapping
+  label: 'Purl Maintain Node Context'
+  mapping:
+    keep_context:
+      type: boolean
+      label: 'Enable/disable context for this node type'
