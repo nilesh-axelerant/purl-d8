@@ -7,6 +7,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\purl\Entity\Provider;
 use Drupal\purl\Plugin\ModifierIndex;
 use Drupal\purl\Plugin\Purl\Method\MethodInterface;
+use Drupal\purl\Plugin\Purl\Method\PreGenerateHookInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class ContextHelper
@@ -71,7 +72,7 @@ class ContextHelper
     /** @var Context $context */
     foreach ($contexts as $context) {
 
-      if (!in_array(MethodInterface::STAGE_PRE_GENERATE, $context->getMethod()->getStages())) {
+      if (!in_array(MethodInterface::STAGE_PRE_GENERATE, $context->getMethod()->getStages()) || !($context->getMethod() instanceof PreGenerateHookInterface)) {
         continue;
       }
 
