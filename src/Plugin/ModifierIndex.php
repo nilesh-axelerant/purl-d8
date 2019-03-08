@@ -39,10 +39,6 @@ class ModifierIndex
     return $modifiers[$provider->id()];
   }
 
-  public function findModifiers() {
-    return array();
-  }
-
   /**
    * Get a list of all modifiers that match a given id.
    *
