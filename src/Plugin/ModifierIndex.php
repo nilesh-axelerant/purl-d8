@@ -56,5 +56,9 @@ class ModifierIndex
 
     return $selected;
   }
+  
+  public function findModifiers() {
+    return array();
+  }
 }
 

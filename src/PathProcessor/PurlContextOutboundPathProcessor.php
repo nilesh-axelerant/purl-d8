@@ -69,6 +69,7 @@ class PurlContextOutboundPathProcessor implements OutboundPathProcessorInterface
         $cacheContexts[] = 'purl';
         $bubbleable_metadata->setCacheContexts($cacheContexts);
       }
+  
       return $this->contextHelper->processOutbound(
         $this->matchedModifiers->createContexts(),
         $path,
