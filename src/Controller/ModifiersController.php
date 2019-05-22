@@ -61,7 +61,7 @@ class ModifiersController extends BaseController
 
     foreach ($this->modifierIndex->findModifiers() as $modifier) {
 
-      $provider = $modifier['provider'];
+      $provider = $modifier->getProvider();
 
       if (!$provider) {
         continue;
@@ -77,7 +77,7 @@ class ModifiersController extends BaseController
         'data' => array(
           '#type' => 'html_tag',
           '#tag' => 'code',
-          '#value' => $modifier['modifier'],
+          '#value' => $modifier->getModifierKey(),
         ),
       );
 
@@ -85,7 +85,7 @@ class ModifiersController extends BaseController
         'data' => array(
           '#type' => 'html_tag',
           '#tag' => 'code',
-          '#value' => $this->stringify($modifier['value']),
+          '#value' => $this->stringify($modifier->getValue()),
         ),
       );
 

@@ -24,13 +24,16 @@ class ModifierIndex
    */
   public function getProviderModifiers(Provider $provider)
   {
-    $modifiers = [];
-
-    foreach ($provider->getProviderPlugin()->getModifierData() as $key => $value) {
-      $modifiers[] = new Modifier($key, $value, $provider->getMethodPlugin(), $provider);
+    static $modifiers = [];
+    if (count($modifiers) && count($modifiers[$provider->id()])) {
+      return $modifiers[$provider->id()];
     }
 
-    return $modifiers;
+    foreach ($provider->getProviderPlugin()->getModifierData() as $key => $value) {
+      $modifiers[$provider->id()][] = new Modifier($key, $value, $provider->getMethodPlugin(), $provider);
+    }
+
+    return $modifiers[$provider->id()];
   }
 
   /**
@@ -56,9 +59,10 @@ class ModifierIndex
 
     return $selected;
   }
-  
+
   public function findModifiers() {
-    return array();
+    $modifiers = $this->findAll();
+    return $modifiers;
   }
 }
 
