@@ -29,6 +29,13 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
    */
   protected $entityStorage;
 
+  /**
+   * The node entity storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $nodeStorage;
+
   protected $routeMatch;
 
   /**
