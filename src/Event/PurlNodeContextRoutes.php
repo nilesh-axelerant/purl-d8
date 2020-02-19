@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\redirect\Exception\RedirectLoopException;
+use Drupal\node\NodeInterface;
 
 /**
  * Event subscriber for redirecting nodes that do not need to keep context.
@@ -44,6 +45,7 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $route_match, MatchedModifiers $matchedModifiers) {
     $this->entityStorage = $entity_type_manager->getStorage('node_type');
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->routeMatch = $route_match;
     $this->matchedModifiers = $matchedModifiers;
   }
@@ -57,10 +59,13 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
   public function purlCheckNodeContext(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher_interface) {
     $route_options = $this->routeMatch->getRouteObject()->getOptions();
     $isAdminRoute = array_key_exists('_admin_route', $route_options) && $route_options['_admin_route'];
+    $entity = $this->routeMatch->getParameter('node');
+    $entity = is_numeric($entity) ? $this->nodeStorage->load($entity) : $entity;
 
     if (!$isAdminRoute
       && $matched = $this->matchedModifiers->getMatched()
-      && $entity = $this->routeMatch->getParameter('node')
+      && $entity = $this->routeMatch->getParameter('node') && $entity = $this->routeMatch->getParameter('node')
+      && $entity instanceof NodeInterface
     ) {
       $node_type = $this->entityStorage->load($entity->bundle());
       $purl_settings = $node_type->getThirdPartySettings('purl');
