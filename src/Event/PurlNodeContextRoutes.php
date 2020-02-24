@@ -71,7 +71,7 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
 
     if (!$isAdminRoute
       && $matched = $this->matchedModifiers->getMatched()
-      && $entity = $this->routeMatch->getParameter('node') && $entity = $this->routeMatch->getParameter('node')
+      && $entity = $this->routeMatch->getParameter('node')
       && $entity instanceof NodeInterface
     ) {
       $node_type = $this->entityStorage->load($entity->bundle());
