@@ -24,7 +24,7 @@ class ModifierIndex
    */
   public function getProviderModifiers(Provider $provider)
   {
-    static $modifiers = [];
+    $modifiers = [];
     if (count($modifiers) && count($modifiers[$provider->id()])) {
       return $modifiers[$provider->id()];
     }

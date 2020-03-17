@@ -39,6 +39,7 @@ class PathPrefixMethod extends MethodAbstract implements MethodInterface, Reques
         $uri = $request->server->get('REQUEST_URI');
         $newPath = substr($uri, strlen($identifier) + 1);
         $request->server->set('REQUEST_URI', $newPath);
+        return $request;
     }
 
     public function enterContext($modifier, $path, array &$options)
