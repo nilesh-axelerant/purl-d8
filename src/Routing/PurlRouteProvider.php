@@ -163,9 +163,7 @@ class PurlRouteProvider extends RouteProvider {
         'query' => $query_parameters,
         'routes' => $routes,
       ];
-      if ($routes->getResources()) {
-        $this->cache->set($cid, $cache_value, CacheBackendInterface::CACHE_PERMANENT, ['route_match']);
-      }
+      $this->cache->set($cid, $cache_value, CacheBackendInterface::CACHE_PERMANENT, ['route_match']);
       return $routes;
     }
   }
