@@ -4,6 +4,7 @@ namespace Drupal\purl\Event;
 
 use Drupal\purl\Entity\Provider;
 use Drupal\purl\MatchedModifiers;
+use Drupal\purl\Modifier;
 use Drupal\purl\Plugin\MethodPluginManager;
 use Drupal\purl\Plugin\ModifierIndex;
 use Drupal\purl\Plugin\ProviderManager;
@@ -19,6 +20,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestSubscriber implements EventSubscriberInterface
 {
+
+  /**
+   * Group purl provider id.
+   */
+  const GROUP_PURL_PROVIDER = 'group_purl_provider';
+
   /**
    * @var ModifierIndex
    */
@@ -62,10 +69,31 @@ class RequestSubscriber implements EventSubscriberInterface
   public function onRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher)
   {
     $request = $event->getRequest();
-    $modifiers = $this->getModifiers();
+    $uri = $request->getPathInfo();
+    [, $uri] = explode('/', $uri);
+
+    // Eliminate the need to get and iterate through all the modifiers as it is
+    // a very resource intensive process.
+    $provider = Provider::load(self::GROUP_PURL_PROVIDER);
+    if ($provider) {
+      $provider_plugin = $this->provider->getProviderPlugin();
+    }
+    if ($provider_plugin) {
+      $modifier = $provider_plugin->getModifierDataByKey($uri);
+      // If this key is not a modifier then it means that either this is
+      // any other sitewide page or this a sub request within a vsite and a
+      // modifier was matched already in the previous request.
+      if (empty($modifier)) {
+        return;
+      }
+      $modifiers[] = new Modifier(key($modifier), reset($modifier), $provider->getMethodPlugin(), $provider);
+    }
+    // If no group purl provider is present then proceed as normal.
+    else {
+      $modifiers = $this->getModifiers();
+    }
 
     $matches = array();
-
     foreach ($modifiers as $modifier) {
 
       $provider = $modifier->getProvider();
