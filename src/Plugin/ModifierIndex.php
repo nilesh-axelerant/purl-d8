@@ -41,7 +41,7 @@ class ModifierIndex
   {
     $modifiers = [];
 
-    if (method_exists($provider->getProviderPlugin(), 'getModifierDataByValue')) {
+    if (method_exists($provider->getProviderPlugin(), 'getModifierDataByKey')) {
       foreach ($provider->getProviderPlugin()->getModifierDataByKey($key) as $k => $value) {
         $modifiers[] = new Modifier($k, $value, $provider->getMethodPlugin(), $provider);
       }
