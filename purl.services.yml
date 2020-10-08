@@ -28,6 +28,7 @@ services:
     arguments: 
       - '@purl.modifier_index'
       - '@purl.matched_modifiers'
+      - '@module_handler'
     tags:
       - { name: event_subscriber }
 

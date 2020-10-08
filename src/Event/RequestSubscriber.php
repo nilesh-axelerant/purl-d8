@@ -2,11 +2,11 @@
 
 namespace Drupal\purl\Event;
 
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\purl\Entity\Provider;
 use Drupal\purl\MatchedModifiers;
-use Drupal\purl\Plugin\MethodPluginManager;
 use Drupal\purl\Plugin\ModifierIndex;
-use Drupal\purl\Plugin\ProviderManager;
 use Drupal\purl\Plugin\Purl\Method\RequestAlteringInterface;
 use Drupal\purl\PurlEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -29,13 +29,20 @@ class RequestSubscriber implements EventSubscriberInterface
    */
   protected $matchedModifiers;
 
+  /**
+   * @var ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
   public function __construct(
     ModifierIndex $modifierIndex,
-    MatchedModifiers $matchedModifiers
+    MatchedModifiers $matchedModifiers,
+    ModuleHandlerInterface $moduleHandler
   )
   {
     $this->modifierIndex = $modifierIndex;
     $this->matchedModifiers = $matchedModifiers;
+    $this->moduleHandler = $moduleHandler;
   }
 
   public static function getSubscribedEvents()
@@ -82,6 +89,8 @@ class RequestSubscriber implements EventSubscriberInterface
         );
       }
     }
+
+    $this->moduleHandler->alter('purl_matched_modifiers', $matches);
 
     foreach ($matches as $match) {
 
