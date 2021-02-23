@@ -144,7 +144,8 @@ class PurlRouteProvider extends RouteProvider {
       $cid = 'route:' . $request->getPathInfo() . ':' . $request->getQueryString();
     }
 
-    if ($cached = $this->cache->get($cid)) {
+    $cached = $this->cache->get($cid);
+    if ($cached && !empty($cached->data['routes']->all())) {
       $this->currentPath->setPath($cached->data['path'], $request);
       $request->query->replace($cached->data['query']);
       return $cached->data['routes'];
