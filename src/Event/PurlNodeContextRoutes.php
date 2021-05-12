@@ -3,7 +3,6 @@
 namespace Drupal\purl\Event;
 
 use Drupal\Core\Url;
-use Drupal\Core\Render\Element\Url;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\purl\PurlEvents;
