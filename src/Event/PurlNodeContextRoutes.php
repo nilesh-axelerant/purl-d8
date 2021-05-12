@@ -2,6 +2,7 @@
 
 namespace Drupal\purl\Event;
 
+use Drupal\Core\Url;
 use Drupal\Core\Render\Element\Url;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
@@ -78,7 +79,7 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
 
       if ($entity->isPublished()) {
         if (!isset($purl_settings['keep_context']) || !$purl_settings['keep_context']) {
-          $url = \Drupal\Core\Url::fromRoute($this->routeMatch->getRouteName(), $this->routeMatch->getRawParameters()->all(), [
+          $url = Url::fromRoute($this->routeMatch->getRouteName(), $this->routeMatch->getRawParameters()->all(), [
             'host' => Settings::get('purl_base_domain'),
             'absolute' => TRUE,
             'purl_exit' => TRUE,
@@ -103,11 +104,7 @@ class PurlNodeContextRoutes implements EventSubscriberInterface {
         }
       } else {
         if (!isset($purl_settings['keep_context']) || !$purl_settings['keep_context']) {
-          drupal_set_message(
-            $entity->label() . ' is currently unpublished. This node is set to remove the context, anonymous users will be redirected to the main base domain.',
-            'status',
-            true
-          );
+          \Drupal::messenger()->addStatus($entity->label() . ' is currently unpublished. This node is set to remove the context, anonymous users will be redirected to the main base domain.', TRUE);
         }
       }
     }

@@ -7,7 +7,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 
-class ContextProviderManager extends DefaultPluginManager implements ContextProviderManagerInterface
+abstract class ContextProviderManager extends DefaultPluginManager implements ContextProviderManagerInterface
 {
     public function __construct(
         \Traversable $namespaces,
