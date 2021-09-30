@@ -32,7 +32,12 @@ use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
  *  links = {
  *    "edit-form" = "/admin/config/search/purl/provider/{purl}",
  *    "delete-form" = "/admin/config/search/purl/provider/{purl}/delete"
- *  }
+ *  },
+ *  config_export = {
+ *    "id",
+ *    "label",
+ *    "method_key",
+ *   }
  * )
  */
 class Provider extends ConfigEntityBase implements ProviderConfigInterface, ProviderInterface
