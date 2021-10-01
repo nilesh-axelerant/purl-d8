@@ -37,6 +37,7 @@ use Drupal\purl\Plugin\Purl\Provider\ProviderInterface;
  *    "id",
  *    "label",
  *    "method_key",
+ *    "provider_key"
  *   }
  * )
  */
