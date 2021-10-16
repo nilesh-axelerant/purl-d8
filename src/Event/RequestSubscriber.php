@@ -105,6 +105,17 @@ class RequestSubscriber implements EventSubscriberInterface
     }
 
     foreach ($matches as $match) {
+      $previous_modifiers = $this->matchedModifiers->getMatched();
+      if (count($previous_modifiers)) {
+        /** @var ModifierMatchedEvent $previous */
+        $previous = last($previous_modifiers);
+        if ($previous->getProvider() == $match['provider_key']
+          && $previous->getModifier() == $match['modifier']
+          && $previous->getValue() == $match['value']
+        ) {
+          return;
+        }
+      }
       $modifier_event = new ModifierMatchedEvent(
         $request,
         $match['provider_key'],
@@ -114,7 +125,6 @@ class RequestSubscriber implements EventSubscriberInterface
       );
       $dispatcher->dispatch(PurlEvents::MODIFIER_MATCHED, $modifier_event);
       $this->matchedModifiers->add($modifier_event);
-
       $request->attributes->set('purl.matched_modifiers', $matches);
 
       if ($match['method'] instanceof RequestAlteringInterface && $newrequest) {
