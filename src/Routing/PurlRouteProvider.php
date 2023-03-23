@@ -118,8 +118,8 @@ class PurlRouteProvider extends RouteProvider {
     CacheBackendInterface $cache_backend,
     InboundPathProcessorInterface $path_processor,
     CacheTagsInvalidatorInterface $cache_tag_invalidator,
-    $table = 'router',
-    LanguageManagerInterface $language_manager = NULL,
+    $table,
+    LanguageManagerInterface $language_manager,
     ContextHelper $contextHelper,
     MatchedModifiers $matchedModifiers
   ) {
